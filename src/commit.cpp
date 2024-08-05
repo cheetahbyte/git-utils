@@ -4,7 +4,6 @@
 #include "commit.h"
 #include <sstream>
 #include <utility>
-#include "common.h"
 
 std::string trim(const std::string &str) {
     size_t first = str.find_first_not_of(" \t\n\r\f\v");
@@ -60,7 +59,7 @@ CommitMessage Commit::getCommitMessage() const {
     return message;
 }
 
-CommitType Commit::getCommitType() const {
+std::string Commit::getCommitType() const {
     return message.getCommitType();
 }
 

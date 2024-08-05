@@ -14,7 +14,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Commit& commit);
 
     [[nodiscard]] CommitMessage getCommitMessage() const;
-    [[nodiscard]] CommitType getCommitType() const;
+    [[nodiscard]] std::string getCommitType() const;
     [[nodiscard]] bool getIsBreaking() const;
 private:
     std::string hash;
