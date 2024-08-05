@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "commit.h"
+#include "config.h"
 #include "version.h"
 
 
@@ -20,10 +21,11 @@ public:
 
 
 
-    static Version getVersion();
+    Version getVersion();
 private:
     static std::string exec(const char*);
-    static Version calculateVersion();
+    Version calculateVersion();
+    Config config;
 };
 
 
