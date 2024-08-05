@@ -8,6 +8,8 @@
 #include <regex>
 #include "gitutil.h"
 
+#include "common.h"
+
 
 std::vector<std::string> splitGitLog(const std::string& gitLog) {
     std::vector<std::string> commits;
@@ -51,16 +53,12 @@ std::vector<Commit> GitUtil::getCommits() {
 Version GitUtil::calculateVersion() {
     Version version;
     for (const auto& commits = getCommits(); const auto &commit: commits) {
-        switch(commit.getCommitType()) {
-            case CommitType::FEATURE:
-                version.increaseMinor();
-                break;
-            case CommitType::FIXTURE:case CommitType::REFACTOR: case CommitType::CHORE:
-                version.increasePatch();
-            break;
-            default:
-                break;
-        }
+        const auto type = commit.getCommitType();
+        const auto minorVersionTypes = config.getConvention()->getTypesForVersion(VersionType::MINOR);
+        if ( contains<std::string>(minorVersionTypes, type))
+            version.increaseMinor();
+        else if (const auto patchVersionTypes = config.getConvention()->getTypesForVersion(VersionType::PATCH); contains<std::string>(patchVersionTypes, type))
+            version.increasePatch();
         if (commit.getIsBreaking())
             version.increaseMajor();
     }

@@ -8,6 +8,11 @@
 #include <string>
 #include <utility>
 
+enum class VersionType {
+    MAJOR,
+    MINOR,
+    PATCH
+};
 
 class Version {
 public:

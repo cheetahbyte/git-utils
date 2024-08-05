@@ -7,20 +7,6 @@
 #include <string>
 #include <vector>
 
-enum class CommitType {
-    FEATURE,
-    FIXTURE,
-    REFACTOR,
-    STYLE,
-    DOCS,
-    BUILD,
-    TEST,
-    PERFORMANCE,
-    CHORE,
-    REVERT,
-    DEPENDENCIES
-};
-
 class CommitMessage {
 public:
     CommitMessage();
@@ -31,14 +17,14 @@ public:
 
     [[nodiscard]] std::string getDescription() const;
 
-    [[nodiscard]] CommitType getCommitType() const;
+    [[nodiscard]] std::string getCommitType() const;
 
     [[nodiscard]] bool getIsBreaking() const;
 
     static std::vector<std::string> parseCommitMessage(std::string &);
 
 private:
-    CommitType type;
+    std::string type;
 
     std::string title;
 
