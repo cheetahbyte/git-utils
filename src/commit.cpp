@@ -4,16 +4,17 @@
 #include "commit.h"
 #include <sstream>
 #include <utility>
+#include <array>
 
 std::string trim(const std::string &str) {
-    size_t first = str.find_first_not_of(" \t\n\r\f\v");
+    const size_t first = str.find_first_not_of(" \t\n\r\f\v");
     if (first == std::string::npos)
         return "";
-    size_t last = str.find_last_not_of(" \t\n\r\f\v");
+    const size_t last = str.find_last_not_of(" \t\n\r\f\v");
     return str.substr(first, last - first + 1);
 }
 
-std::array<std::string, 4> splitCommit(std::string& commit) {
+std::array<std::string, 4> splitCommit(const std::string& commit) {
     std::istringstream stream(commit);
     std::string line;
     std::array<std::string, 4> parts; // Array to store commit hash, author, date, and message
