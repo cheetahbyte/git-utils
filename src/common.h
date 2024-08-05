@@ -54,4 +54,10 @@ inline std::string removeNewlines(const std::string& str) {
     return result;
 }
 
+template <typename T>
+bool contains(const std::vector<T> &vec, const T element) {
+    return std::find(vec.begin(), vec.end(), element) != vec.end();
+}
+
+
 #endif //COMMON_H
