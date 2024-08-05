@@ -8,4 +8,8 @@ add_executable(git_utils src/main.cpp
         src/gitutil.h
         src/commit.h
         src/commit.cpp
-        src/common.h)
+        src/common.h
+        src/commitmessage.cpp
+        src/commitmessage.h
+        src/version.cpp
+        src/version.h)

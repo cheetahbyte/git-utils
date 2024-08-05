@@ -6,7 +6,6 @@
 #include <memory>
 #include <vector>
 #include <regex>
-#include "common.h"
 #include "gitutil.h"
 
 
@@ -43,9 +42,33 @@ std::string GitUtil::getLog() {
 
 std::vector<Commit> GitUtil::getCommits() {
     std::vector<Commit> commits;
-    for (const auto log =  getLog(); const auto& commit: splitGitLog(log))
+    for (const auto log =  getLog(); auto commit: splitGitLog(log))
         commits.emplace_back(commit);
+    std::reverse(commits.begin(), commits.end());
     return commits;
+}
+
+Version GitUtil::calculateVersion() {
+    Version version;
+    for (const auto& commits = getCommits(); const auto &commit: commits) {
+        switch(commit.getCommitType()) {
+            case CommitType::FEATURE:
+                version.increaseMinor();
+                break;
+            case CommitType::FIXTURE:case CommitType::REFACTOR: case CommitType::CHORE:
+                version.increasePatch();
+            break;
+            default:
+                break;
+        }
+        if (commit.getIsBreaking())
+            version.increaseMajor();
+    }
+    return version;
+}
+
+Version GitUtil::getVersion() {
+    return calculateVersion();
 }
 
 std::string GitUtil::exec(const char *cmd) {

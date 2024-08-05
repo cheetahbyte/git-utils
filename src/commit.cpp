@@ -6,7 +6,7 @@
 #include <utility>
 #include "common.h"
 
-std::string trim(const std::string& str) {
+std::string trim(const std::string &str) {
     size_t first = str.find_first_not_of(" \t\n\r\f\v");
     if (first == std::string::npos)
         return "";
@@ -14,7 +14,7 @@ std::string trim(const std::string& str) {
     return str.substr(first, last - first + 1);
 }
 
-std::array<std::string, 4> splitCommit(const std::string& commit) {
+std::array<std::string, 4> splitCommit(std::string& commit) {
     std::istringstream stream(commit);
     std::string line;
     std::array<std::string, 4> parts; // Array to store commit hash, author, date, and message
@@ -41,14 +41,29 @@ std::array<std::string, 4> splitCommit(const std::string& commit) {
     return parts;
 }
 
-Commit::Commit(const std::string &rawCommit) {
-    const auto &[hash, author, date, message] = splitCommit(rawCommit);
-    this->hash = hash;
+
+Commit::Commit(std::string &rawCommit) {
+    auto [a_hash, a_author, a_date, a_message] = splitCommit(rawCommit);
+    this->hash = a_hash;
     this->author = author;
     this->date = date;
-    this->message = message;
+    this->message = CommitMessage(CommitMessage::parseCommitMessage(a_message));
 }
 
-Commit::Commit(std::string hash, std::string author, std::string date, std::string message): hash(std::move(hash)),
-    author(std::move(author)), date(std::move(date)), message(std::move(message)) {
+Commit::Commit(std::string hash, std::string author, std::string date,
+               std::string &message): hash(std::move(hash)),
+                                            author(std::move(author)), date(std::move(date)),
+                                            message(CommitMessage(CommitMessage::parseCommitMessage(message))) {
+}
+
+CommitMessage Commit::getCommitMessage() const {
+    return message;
+}
+
+CommitType Commit::getCommitType() const {
+    return message.getCommitType();
+}
+
+bool Commit::getIsBreaking() const {
+    return message.getIsBreaking();
 }

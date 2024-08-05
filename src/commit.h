@@ -4,19 +4,23 @@
 
 #ifndef COMMIT_H
 #define COMMIT_H
+#include "commitmessage.h"
 #include <string>
 
 class Commit {
 public:
-    explicit Commit(const std::string &rawCommit);
-    Commit(std::string hash, std::string author, std::string date, std::string message);
+    explicit Commit(std::string &rawCommit);
+    Commit(std::string hash, std::string author, std::string date, std::string& message);
     friend std::ostream& operator<<(std::ostream& os, const Commit& commit);
 
+    [[nodiscard]] CommitMessage getCommitMessage() const;
+    [[nodiscard]] CommitType getCommitType() const;
+    [[nodiscard]] bool getIsBreaking() const;
 private:
     std::string hash;
     std::string author;
     std::string date;
-    std::string message;
+    CommitMessage message;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Commit& commit) {

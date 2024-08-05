@@ -6,6 +6,9 @@
 #define COMMON_H
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cctype>
+
 
 inline std::vector<std::string> splitByDelimiter(const std::string& str, const std::string& delimiter) {
     std::vector<std::string> result;
@@ -23,11 +26,32 @@ inline std::vector<std::string> splitByDelimiter(const std::string& str, const s
     return result;
 }
 
+// Trim from start (in place)
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+// Trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+// Trim from both ends (in place)
+static inline void trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
+}
 
 // Function to remove all newline characters from a string
 inline std::string removeNewlines(const std::string& str) {
     std::string result = str;
     std::erase(result, '\n');
+    trim(result);
     return result;
 }
+
 #endif //COMMON_H

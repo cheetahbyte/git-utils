@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "commit.h"
+#include "version.h"
 
 
 class GitUtil {
@@ -15,9 +16,14 @@ public:
 
     static std::string getLog();
 
-    static std::vector<Commit> getCommits() ;
+    static std::vector<Commit> getCommits();
+
+
+
+    static Version getVersion();
 private:
     static std::string exec(const char*);
+    static Version calculateVersion();
 };
 
 
