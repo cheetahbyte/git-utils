@@ -1,3 +1,4 @@
 *.o
 cmake-build-*/
 .idea/
+build/
