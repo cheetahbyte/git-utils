@@ -9,8 +9,6 @@
 
 std::vector<std::string> yamlListToVector(const fkyaml::node &node) {
     std::vector<std::string> result;
-    std::cout << node << std::endl;
-    std::cout << node.is_sequence() << std::endl;
     if (node.is_sequence()) {
         for (const auto &i: node) {
             if (const auto val = i.get_value<std::string>(); val.empty())
@@ -23,13 +21,30 @@ std::vector<std::string> yamlListToVector(const fkyaml::node &node) {
 Config::Config() {
     const auto &rootNode = fromFile("releases.yaml");
     const auto conventioNode = rootNode["convention"];
-    m_convention = ConventionConfig(yamlListToVector(conventioNode["commitTypes"]), yamlListToVector(conventioNode["commitScopes"]));
+    m_convention = ConventionConfig(yamlListToVector(conventioNode["commitTypes"]),
+                                    yamlListToVector(conventioNode["commitScopes"]));
+    // TODO: somehow, yamlListTovector didnt work here
+    for (const auto& x: conventioNode["versions"]["minor"]) {
+        m_convention.addCommitTypeToVersion(VersionType::MINOR, x.get_value<std::string>());
+    }
+    for (const auto& x: conventioNode["versions"]["patch"]) {
+        m_convention.addCommitTypeToVersion(VersionType::PATCH, x.get_value<std::string>());
+    }
 }
+
 
 Config::Config(const std::filesystem::path &path) {
     const auto &rootNode = fromFile(path);
     const auto conventioNode = rootNode["convention"];
-    m_convention = ConventionConfig(yamlListToVector(conventioNode["commitTypes"]), yamlListToVector(conventioNode["commitScopes"]));
+    m_convention = ConventionConfig(yamlListToVector(conventioNode["commitTypes"]),
+                                    yamlListToVector(conventioNode["commitScopes"]));
+    // TODO: somehow, yamlListTovector didnt work here
+    for (const auto& x: conventioNode["versions"]["minor"]) {
+        m_convention.addCommitTypeToVersion(VersionType::MINOR, x.get_value<std::string>());
+    }
+    for (const auto& x: conventioNode["versions"]["patch"]) {
+        m_convention.addCommitTypeToVersion(VersionType::PATCH, x.get_value<std::string>());
+    }
 }
 
 ConventionConfig *Config::getConvention() {

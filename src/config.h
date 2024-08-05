@@ -10,11 +10,15 @@
 #include <vector>
 #include <fkYAML/node.hpp>
 
+#include "version.h"
+
 struct ConventionConfig {
     using strVec = std::vector<std::string>;
 private:
     strVec commitTypes;
     strVec commitScopes;
+    std::map<VersionType, strVec> versionTypes;
+
 public:
     explicit ConventionConfig(strVec cmTps, strVec cmSps): commitTypes(std::move(cmTps)), commitScopes(std::move(cmSps)) {};
     ConventionConfig() = default;
@@ -23,6 +27,14 @@ public:
     }
     strVec &getCommitScopes() {
         return commitScopes;
+    }
+
+    strVec &getTypesForVersion(const VersionType vt) {
+        return versionTypes[vt];
+    }
+
+    void addCommitTypeToVersion(const VersionType vt, const std::string &type) {
+        versionTypes[vt].push_back(type);
     }
 };
 
