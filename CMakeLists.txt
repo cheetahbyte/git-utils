@@ -3,6 +3,8 @@ project(git_utils)
 
 set(CMAKE_CXX_STANDARD 26)
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -26,3 +28,7 @@ add_executable(git_utils src/main.cpp
         src/config.h)
 
 target_link_libraries(git_utils PRIVATE fkYAML::fkYAML)
+
+install(TARGETS git_utils DESTINATION bin)
+
+include(CPack)

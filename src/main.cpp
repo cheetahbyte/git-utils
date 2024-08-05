@@ -3,6 +3,7 @@
 #include "gitutil.h"
 
 int main() {
-    std::cout << GitUtil::getVersion() << std::endl;
+    GitUtil util;
+    std::cout << util.getVersion() << std::endl;
     return 0;
 }
