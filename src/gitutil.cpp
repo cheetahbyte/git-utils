@@ -6,6 +6,15 @@
 #include <memory>
 #include <vector>
 #include <regex>
+#ifdef _WIN32
+#include <stdio.h>
+#include <stdlib.h>
+#define popen _popen
+#define pclose _pclose
+#else
+#include <unistd.h>
+#include <cstdio>
+#endif
 #include "gitutil.h"
 
 #include "common.h"
@@ -44,7 +53,8 @@ std::string GitUtil::getLog() {
 
 std::vector<Commit> GitUtil::getCommits() {
     std::vector<Commit> commits;
-    for (const auto log =  getLog(); auto commit: splitGitLog(log))
+    const auto log =  getLog();
+    for (auto commit: splitGitLog(log))
         commits.emplace_back(commit);
     std::reverse(commits.begin(), commits.end());
     return commits;
@@ -52,7 +62,8 @@ std::vector<Commit> GitUtil::getCommits() {
 
 Version GitUtil::calculateVersion() {
     Version version;
-    for (const auto& commits = getCommits(); const auto &commit: commits) {
+    const auto& commits = getCommits();
+    for (const auto &commit: commits) {
         const auto type = commit.getCommitType();
         const auto minorVersionTypes = config.getConvention()->getTypesForVersion(VersionType::MINOR);
         if ( contains<std::string>(minorVersionTypes, type))
