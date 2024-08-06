@@ -14,6 +14,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fkYAML)
 
+FetchContent_Declare(
+        args
+        GIT_REPOSITORY https://github.com/Taywee/args
+        GIT_TAG master
+)
+
+FetchContent_MakeAvailable(args)
+
 add_executable(git_utils src/main.cpp
         src/gitutil.cpp
         src/gitutil.h
@@ -26,9 +34,7 @@ add_executable(git_utils src/main.cpp
         src/version.h
         src/config.cpp
         src/config.h)
-
+target_include_directories(${PROJECT_NAME} PRIVATE ${args_SOURCE_DIR})
 target_link_libraries(git_utils PRIVATE fkYAML::fkYAML)
-
 install(TARGETS git_utils DESTINATION bin)
-
 include(CPack)
