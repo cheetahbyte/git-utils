@@ -30,6 +30,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++-12
 
+      - name: Cache Windows dependencies
+        if: runner.os == 'Windows'
+        uses: actions/cache@v3
+        with:
+          path: |
+            C:\ProgramData\chocolatey\lib\cmake
+            C:\ProgramData\chocolatey\lib\visualstudio2019buildtools
+            C:\ProgramData\chocolatey\lib\visualstudio2019-workload-vctools
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/CMakeLists.txt') }}
+
       - name: Install dependencies on Windows
         if: runner.os == 'Windows'
         run: |
